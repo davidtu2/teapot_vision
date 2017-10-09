@@ -1,6 +1,11 @@
-// 
-// Michael Shafae
-// mshafae at fullerton.edu
+// Name: 							David Tu
+// Email: 							david.tu2@csu.fullerton.edu
+// Date: 							11/21/17
+// Class: 							CPSC 486-02
+// Assignment: 						teapot-vision
+//
+// Original program courtesy of: 	Michael Shafae
+// 									mshafae at fullerton.edu
 // 
 // A toy program which renders a teapot and two light sources. 
 //
@@ -194,7 +199,16 @@ public:
       // do something here to check to see if the teapots
       // are in or out of the view frustum. Set the visibility
       // flag as needed.
-      teapots[i]->visible = true;
+	  glm::mat4 lookAtMatrix;
+	  mainCamera.lookAtMatrix(lookAtMatrix);//Needed in order to move the main camera into the teapot's 	  //coordinate system
+	  glm::vec4 clipPt = clipPlaneMatrix * lookAtMatrix * glm::vec4(teapots[i]->position, 1);//M*V*P
+	  if(-clipPt.w < clipPt.x && clipPt.x < clipPt.w &&//-w < x < w
+		 -clipPt.w < clipPt.y && clipPt.y < clipPt.w &&//-w < y < w
+		 -clipPt.w < clipPt.z && clipPt.z < clipPt.w){//-w < z < w
+		teapots[i]->visible = true;
+	  }else{
+		teapots[i]->visible = false;
+	  }
     }
   }
 
